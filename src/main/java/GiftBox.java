@@ -31,11 +31,10 @@ class GiftBox {
 
     /**
      * Метод удаления сладостей из подарочной коробки
-     * @param sweetsToRemove удаляемая сладсть из класса sweets.Sweets
+     * @param sweetsToRemove удаляемая сладость из класса sweets.Sweets
      */
     void removeSweetsFromTheBox(Sweets sweetsToRemove) {
-        if (sweetsToRemove != null & sweetsInTheBox.contains(sweetsToRemove)) { //контролируем передаваемое значение
-            sweetsInTheBox.remove(sweetsToRemove);
+        if (sweetsInTheBox.remove(sweetsToRemove)) { //контролируем передаваемое значение
             boxPrice -= sweetsToRemove.getPrice(); //уменьшаем стоимость и вес коробки по удаляемой сладости
             boxWeight -= sweetsToRemove.getWeight();
         }
