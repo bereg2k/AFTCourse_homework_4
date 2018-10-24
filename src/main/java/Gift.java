@@ -3,6 +3,7 @@ import sweets.Jellybean;
 import sweets.Lollipop;
 import sweets.Sweets;
 
+import java.util.Iterator;
 import java.util.Scanner;
 
 /**
@@ -41,53 +42,37 @@ public class Gift {
 
         System.out.println("\nВас приветствует \"Упаковка подарка!\"\n");
 
-        GiftBox giftBox = new GiftBox();
+        GiftBox giftBox = new GiftBox(); //создаём новую подарочную коробку
 
-        System.out.println(giftBox.toString());
-
-        System.out.println("Добавим следующие сладости в коробку:");
-        System.out.println(chocolate1.toString());
-        giftBox.addSweetsToTheBox(chocolate1);
-
-        System.out.println(chocolate5.toString());
-        giftBox.addSweetsToTheBox(chocolate5);
-
-        System.out.println(lolliBubble.toString());
-        giftBox.addSweetsToTheBox(lolliBubble);
-
-        System.out.println("И вот что получится в результате добавления сладостей в коробку:");
-        System.out.println(giftBox.toString());
-
-        System.out.println("Теперь заберем оттуда следующую сладость: ");
-        System.out.println(chocolate1.toString());
-        giftBox.removeSweetsFromTheBox(chocolate1);
-
-        System.out.println("И вот что получится в результате вынимания сладостей из коробки:");
-        System.out.println(giftBox.toString());
-
-/*
         System.out.println("Теперь давайте конкретнее. Выберем чем конкретно наполним подарочек.");
         boolean badInput = false; //флаг для контроля некорректного ввода
         boolean wrapUp = false;
         while (!badInput & !wrapUp) {
-            System.out.print("Введите '1' для добавления шоколада," +
-                    " '2' - для мармелада, '3' - для леденцов или '4' для завершения: ");
+            System.out.print("\nВведите '1' для добавления шоколада, '2' - для мармелада, '3' - для леденцов,\n" +
+                    "'4' - посмотреть что в коробке,'5' - для УДАЛЕНИЯ сладостей из коробки,'6' для завершения упаковки: ");
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1:
                     System.out.println("Выберите нужную шоколадку для подарка из списка (введите её номер): ");
-                    giftBox.addSweetsToTheBox(selectSweet(chocolatePackage));
+                    giftBox.addSweetsToTheBox(selectSweetsToAdd(chocolatePackage));
                     break;
                 case 2:
                     System.out.println("Выберите нужный мармелад для подарка из списка (введите его номер): ");
-                    giftBox.addSweetsToTheBox(selectSweet(jellybeanPackage));
+                    giftBox.addSweetsToTheBox(selectSweetsToAdd(jellybeanPackage));
                     break;
                 case 3:
                     System.out.println("Выберите нужный леденец для подарка из списка (введите его номер): ");
-                    giftBox.addSweetsToTheBox(selectSweet(lollipopPackage));
+                    giftBox.addSweetsToTheBox(selectSweetsToAdd(lollipopPackage));
                     break;
                 case 4:
-                    System.out.println("Пакуем подарок, спасибо!");
+                    System.out.println("Вот текущее содержимое коробки: ");
+                    giftBox.showBoxContentWithPriceWeight();
+                    break;
+                case 5:
+                    giftBox.removeSweetsFromTheBox(selectSweetsToRemove(giftBox)); //вызываем метод удаления выбранной сладости
+                    break;
+                case 6:
+                    System.out.println("\nПакуем подарок, спасибо!");
                     wrapUp = true;
                     break;
                 default:
@@ -97,73 +82,8 @@ public class Gift {
             }
         }
 
-        //распечатываем содержимое получившегося подарка
-        System.out.println("Отличный выбор! Вот из чего состоит ваш подарок:");
-        System.out.println(giftBox.toString());
-
-        //вызываем методы подсчёта общего веса и стоимости подарка
-        System.out.printf("\nОбщий вес подарка = %.2f г.", giftBox.getBoxWeight());
-        System.out.printf("\nОбщая стоимость подарка = %.2f руб.", giftBox.getBoxPrice());
-*/
-        /*
-        System.out.print("Введите нужное количество сладостей в подарке : ");
-        int giftSize = scanner.nextInt();
-        sweets.Sweets gift[] = new sweets.Sweets[giftSize];   //создаём массив для подарка нужного размера
-
-        //наполняем подарок разными сладостями. Пользователь последовательно выбирает нужный вид и наименование.
-        System.out.println("Теперь давайте конкретнее. Выберем чем конкретно наполним подарочек.");
-        int choice;
-        for (int i = 0; i < giftSize; i++) {
-            System.out.print("Введите '1' для добавления шоколада, '2' - для мармелада или '3' - для леденцов: ");
-            choice = scanner.nextInt();
-            boolean badInput = false; //флаг для контроля некорректного ввода
-            switch (choice) {
-                case 1:
-                    System.out.println("Выберите нужную шоколадку для подарка из списка (введите её номер): ");
-                    gift[i] = selectSweet(chocolatePackage);
-                    break;
-                case 2:
-                    System.out.println("Выберите нужный мармелад для подарка из списка (введите его номер): ");
-                    gift[i] = selectSweet(jellybeanPackage);
-                    break;
-                case 3:
-                    System.out.println("Выберите нужный леденец для подарка из списка (введите его номер): ");
-                    gift[i] = selectSweet(lollipopPackage);
-                    break;
-                default:
-                    System.out.println("Введен неверный номер! Попробуйте ешё раз!"); //обработка некорректного ввода
-                    badInput = true; //теперь не будем выводить количество оставшегося места в подарке
-                    i--; //возвращаем счётчик на шаг назад и начинаем снова
-                    break;
-            }
-
-            if (i + 1 < gift.length & !badInput) { //выводим количество оставшегося места
-                System.out.println("Ещё осталось добавить сладостей: " + (giftSize - i - 1) + ".\n");
-            }
-        }
-
-        //распечатываем содержимое получившегося подарка
-        System.out.println("Отличный выбор! Вот из чего состоит ваш подарок:");
-        printSweetsArray(gift);
-
-        //вызываем методы подсчёта общего веса и стоимости подарка
-        System.out.printf("\nОбщий вес подарка = %.2f г.", getGiftTotalWeight(gift));
-        System.out.printf("\nОбщая стоимость подарка = %.2f руб.", getGiftTotalPrice(gift));
-*/
-
-    }
-
-
-    /**
-     * Метод печати элементов массива из класса сладостей sweets.Sweets.
-     * При распечатке добавляем порядковые номера для удобства (начинаем с 1, а не с 0!).
-     *
-     * @param sweetsArray массив сладостей в подарке
-     */
-    private static void printSweetsArray(Sweets sweetsArray[]) {
-        for (int i = 0; i < sweetsArray.length; i++) {
-            System.out.println((i + 1) + ". " + sweetsArray[i].toString());
-        }
+        System.out.println("\nВот итоговое содержимое нашей коробки: ");
+        giftBox.showBoxContentWithPriceWeight();
     }
 
     /**
@@ -172,8 +92,12 @@ public class Gift {
      * @param sweetsArray массив сладостей в подарке
      * @return выбранная сладость (в виде элемента массива sweets.Sweets)
      */
-    private static Sweets selectSweet(Sweets sweetsArray[]) {
-        printSweetsArray(sweetsArray);
+    private static Sweets selectSweetsToAdd(Sweets sweetsArray[]) {
+
+        for (int i = 0; i < sweetsArray.length; i++) { //распечатываем переданный массив сладостей для выбора
+            System.out.println((i + 1) + ". " + sweetsArray[i].toString());
+        }
+
         Scanner scanner = new Scanner(System.in);
         int sweetsChoice = scanner.nextInt();
         while (sweetsChoice > sweetsArray.length || sweetsChoice <= 0) { //обработка некорректного ввода
@@ -181,5 +105,37 @@ public class Gift {
             sweetsChoice = scanner.nextInt();
         }
         return sweetsArray[sweetsChoice - 1]; //нумерация на экране начинается с 1 (не как в нормальной логике массивов)
+    }
+
+    /**
+     * Метод позволяет выбрать определенную сладость из выбранной подарочной коробки для удаления.
+     *
+     * @param giftBox подарочная коробка со сладостями
+     * @return выбранная сладость класса sweets.Sweets для удаления из коробки
+     */
+    private static Sweets selectSweetsToRemove(GiftBox giftBox) {
+        Scanner scanner = new Scanner(System.in);
+
+        if (giftBox.getSweetsInTheBox().isEmpty()) { //для удаления в коробке должны быть сладости
+            System.out.println("Ваша коробка пуста, тут нечего вынимать!");
+            return null;
+        } else {
+            System.out.println("Какую сладость вы хотите удалить?");
+            giftBox.showBoxContent();
+            int removeChoice = scanner.nextInt();
+
+            if (removeChoice <= 0 || removeChoice > giftBox.getSweetsInTheBox().size()) { //контроль некорректного ввода
+                System.out.println("Введен некорректный порядковый номер сладости для удаления!");
+                return null;
+            }
+
+            //проходим по содержимому коробки с помощью итератора.
+            Iterator iterator = giftBox.getSweetsInTheBox().iterator();
+            Sweets sweetsToRemove = null;
+            for (int i = 0; i < removeChoice; i++) {
+                sweetsToRemove = (Sweets) iterator.next();
+            }
+            return sweetsToRemove;
+        }
     }
 }
