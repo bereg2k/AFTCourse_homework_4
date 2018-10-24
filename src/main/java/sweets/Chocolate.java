@@ -8,6 +8,11 @@ public class Chocolate extends Sweets {
         this.chocType = chocType;
     }
 
+    public Chocolate(String s) {
+        super(s, 100,70);
+        chocType = "молочный";
+    }
+
     @Override
     public String toString() {
         return "Шоколад [" + super.toString() + ", тип: " + chocType + "]";

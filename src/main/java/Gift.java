@@ -1,10 +1,10 @@
+import factory.ChocolateFactory;
 import sweets.Chocolate;
-import sweets.Jellybean;
-import sweets.Lollipop;
+import sweets.Sweets;
 
 /**
  * Задание "Упаковка подарка".
- * 1) Реализовать: функциональный интерфейс фабрики сладостей - который имеет один асбтрактный метод по созданию вкусняшек.
+ * 1) Реализовать: функциональный интерфейс фабрики сладостей - который имеет один абcтрактный метод по созданию вкусняшек.
  * Реализовать данный интерфейс 4 раза - 2 как отдельные классы, 2 в коде через лямбды (см в презентации Person::new)
  * то есть фабрика может генерировать только определенные классы сладостей, только печеньки или только шоколадки,
  * или строго по весу подбирать или по цене (тут на ваше усмотрение).
@@ -26,23 +26,13 @@ import sweets.Lollipop;
 public class Gift {
     public static void main(String[] args) {
 
-        //создаем объекты классов для доступных видов сладостей: шоколад, мармелад, леденцы
-        Chocolate chocolate1 = new Chocolate("Alpen Gold Milky Ways", 100, 45.99, "молочный");
-        Chocolate chocolate2 = new Chocolate("Alpen Gold Cappuccino", 100, 68.99, "молочный");
-        Chocolate chocolate3 = new Chocolate("Lindt 99%", 100, 155.50, "тёмный");
-        Chocolate chocolate4 = new Chocolate("Snickers KingSize", 89.45, 65.25, "молочный");
-        Chocolate chocolate5 = new Chocolate("Milka Arctic", 50.75, 75.10, "белый");
-
-        Jellybean jellySB = new Jellybean("Haribo Bears", 90.54, 45.30, "клубника");
-        Jellybean jellyBanana = new Jellybean("Skittles popups", 45, 30.90, "банан");
-
-        Lollipop lolliChup = new Lollipop("Chupa-Chups Megastar", 40.99, 38.50, "XL");
-        Lollipop lolliBubble = new Lollipop("Bubble Dinger Vanilla", 10.45, 20.50, "S");
-        Lollipop lolliTop = new Lollipop("TOP of the POP", 15.99, 25.99, "M");
-
         GiftBox giftBox = new GiftBox(); //создаём новую подарочную коробку
 
-        System.out.println("\nВас приветствует \"Упаковка подарка!\"\n");
+        ChocolateFactory alenkaFactory = Chocolate::new;
+        Sweets chocolateAlenkaMilk = alenkaFactory.createSweets("Алёнка молочный");
+        System.out.println(chocolateAlenkaMilk);
 
+//        ChocolateFactory<Chocolate> chocolateFactory = Chocolate::new;
+//        Sweets chocolate = chocolateFactory.create("Алёнка", "молочный");
     }
 }
