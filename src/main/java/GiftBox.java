@@ -2,6 +2,7 @@ import sweets.Sweets;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Класс для описания свойств и методов подарочной коробки.
@@ -11,6 +12,7 @@ class GiftBox {
     private List<Sweets> sweetsInTheBox = new ArrayList<>(); //массив сладостей
     private double boxWeight; //общий вес коробки
     private double boxPrice; //общая стоимость коробки
+    private Predicate <Sweets> someRequirement = sweet -> sweet.isRight;
 
     GiftBox() {
     }
@@ -19,13 +21,17 @@ class GiftBox {
         return sweetsInTheBox;
     }
 
+    void setPolicy(Predicate<Sweets> policyPredicate){
+        someRequirement = policyPredicate;
+    }
+
     /**
      * Метод добавления сладостей в подарочную коробку.
      *
      * @param sweetsToAdd сладость для добавления из класса sweets.Sweets
      */
     void addSweetsToTheBox(Sweets sweetsToAdd) {
-        if (sweetsToAdd != null) {
+        if (sweetsToAdd != null & someRequirement.test(sweetsToAdd)) {
             sweetsInTheBox.add(sweetsToAdd);
             boxPrice += sweetsToAdd.getPrice(); //увеличиваем стоимость и вес коробки по добавленной сладости
             boxWeight += sweetsToAdd.getWeight();

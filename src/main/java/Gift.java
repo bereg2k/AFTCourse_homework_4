@@ -30,7 +30,7 @@ public class Gift {
         //1. Создать фабрику по производству сладостей.
         //создание объекта класса с помощью лямбда-выражения
         System.out.println("Добавим немного шоколадных батончиков...");
-        SweetsFactory marsBars = name -> new Chocolate(name,80,70,"молочный");
+        SweetsFactory marsBars = name -> new Chocolate(name, 80, 70, "молочный");
         giftBox.addSweetsToTheBox(marsBars.createSweets("MARS XL"));
         giftBox.addSweetsToTheBox(marsBars.createSweets("MARS Peanuts"));
         giftBox.showBoxContent();
@@ -50,5 +50,27 @@ public class Gift {
         giftBox.showBoxContent();
 
         //2. Реализация policy для подарочной коробки.
+
+        System.out.println("\nДля следующего случая, очистим полностью нашу подарочную коробку...");
+        giftBox.getSweetsInTheBox().clear();
+        giftBox.showBoxContent();
+
+        System.out.println("\nДавайте добавим неподходящую шоколадку...");
+        Chocolate wrongAlenka = new Chocolate("Wrong Alenka",100,45,"молочный");
+        wrongAlenka.setRight(false);
+        giftBox.addSweetsToTheBox(wrongAlenka);
+        giftBox.showBoxContent();
+
+        System.out.println("\nДавайте добавим подходящую шоколадку...");
+        Chocolate rightAlenka = new Chocolate("Right Alenka",100,45,"молочный");
+        wrongAlenka.setRight(true);
+        giftBox.addSweetsToTheBox(rightAlenka);
+        giftBox.showBoxContent();
+
+        System.out.println("\nПоменяем условие добавления и опять добавим неподходящую шоколадку...");
+        giftBox.setPolicy(s -> false);
+        giftBox.addSweetsToTheBox(wrongAlenka);
+        giftBox.showBoxContent();
+
     }
 }
