@@ -8,8 +8,8 @@ public class Chocolate extends Sweets {
         this.chocType = chocType;
     }
 
-    public Chocolate(String s) {
-        super(s, 100,70);
+    public Chocolate(String name) {
+        super(name, 70, 80);
         chocType = "молочный";
     }
 

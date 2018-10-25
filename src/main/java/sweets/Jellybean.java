@@ -8,6 +8,11 @@ public class Jellybean extends Sweets {
         this.flavour = flavour;
     }
 
+    public Jellybean(String name) {
+        super(name, 40,50);
+        flavour = "клубника";
+    }
+
     @Override
     public String toString() {
         return "Мармелад [" + super.toString() + ", вкус: " + flavour + "]";

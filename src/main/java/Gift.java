@@ -1,6 +1,7 @@
-import factory.ChocolateFactory;
+import factory.LollipopFactory;
+import factory.SweetsFactory;
 import sweets.Chocolate;
-import sweets.Sweets;
+import sweets.Jellybean;
 
 /**
  * Задание "Упаковка подарка".
@@ -18,8 +19,6 @@ import sweets.Sweets;
  * вывести название класса каждой сладости, посчитать количество определенного вида сладостей в коробке
  * 5) Для более симпатичной реализации классов самих сладостей, можете добавить ENUM’ы.
  * Там типа шоколада (белый, молочный, темный), размерности (S, M, XL) или еще что-то
- * <p>
- * Пользователь может добавлять по одному виду каждой сладости за раз (сейчас есть 3 вида).
  *
  * @author Oleg Berezhnoy
  */
@@ -28,11 +27,28 @@ public class Gift {
 
         GiftBox giftBox = new GiftBox(); //создаём новую подарочную коробку
 
-        ChocolateFactory alenkaFactory = Chocolate::new;
-        Sweets chocolateAlenkaMilk = alenkaFactory.createSweets("Алёнка молочный");
-        System.out.println(chocolateAlenkaMilk);
+        //1. Создать фабрику по производству сладостей.
+        //создание объекта класса с помощью лямбда-выражения
+        System.out.println("Добавим немного шоколадных батончиков...");
+        SweetsFactory marsBars = name -> new Chocolate(name,80,70,"молочный");
+        giftBox.addSweetsToTheBox(marsBars.createSweets("MARS XL"));
+        giftBox.addSweetsToTheBox(marsBars.createSweets("MARS Peanuts"));
+        giftBox.showBoxContent();
 
-//        ChocolateFactory<Chocolate> chocolateFactory = Chocolate::new;
-//        Sweets chocolate = chocolateFactory.create("Алёнка", "молочный");
+        //создание объекта класса с помощью ссылки на метод (на конструктор)
+        System.out.println("\nДобавим немного мишек Haribo...");
+        SweetsFactory hariboProduction = Jellybean::new;
+        giftBox.addSweetsToTheBox(hariboProduction.createSweets("Haribo Super Bears"));
+        giftBox.addSweetsToTheBox(hariboProduction.createSweets("Haribo Bears From Space"));
+        giftBox.showBoxContent();
+
+        //создание объекта класса через класс конкретной фабрики
+        System.out.println("\nДобавим немного продукции компании \"Chupa Chups\"...");
+        LollipopFactory chupaChupsInc = new LollipopFactory();
+        giftBox.addSweetsToTheBox(chupaChupsInc.createSweets("ChupaChups strawberry"));
+        giftBox.addSweetsToTheBox(chupaChupsInc.createSweets("ChupaChups banana"));
+        giftBox.showBoxContent();
+
+        //2. Реализация policy для подарочной коробки.
     }
 }

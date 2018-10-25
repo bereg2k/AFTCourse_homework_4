@@ -8,6 +8,11 @@ public class Lollipop extends Sweets {
         this.size = size;
     }
 
+    public Lollipop(String name) {
+        super(name, 15, 30);
+        size = "S";
+    }
+
     @Override
     public String toString() {
         return "Леденец [" + super.toString() + ", размер: " + size + "]";

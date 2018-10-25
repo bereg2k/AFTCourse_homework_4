@@ -21,16 +21,20 @@ class GiftBox {
 
     /**
      * Метод добавления сладостей в подарочную коробку.
+     *
      * @param sweetsToAdd сладость для добавления из класса sweets.Sweets
      */
     void addSweetsToTheBox(Sweets sweetsToAdd) {
-        sweetsInTheBox.add(sweetsToAdd);
-        boxPrice += sweetsToAdd.getPrice(); //увеличиваем стоимость и вес коробки по добавленной сладости
-        boxWeight += sweetsToAdd.getWeight();
+        if (sweetsToAdd != null) {
+            sweetsInTheBox.add(sweetsToAdd);
+            boxPrice += sweetsToAdd.getPrice(); //увеличиваем стоимость и вес коробки по добавленной сладости
+            boxWeight += sweetsToAdd.getWeight();
+        }
     }
 
     /**
      * Метод удаления сладостей из подарочной коробки
+     *
      * @param sweetsToRemove удаляемая сладость из класса sweets.Sweets
      */
     void removeSweetsFromTheBox(Sweets sweetsToRemove) {
