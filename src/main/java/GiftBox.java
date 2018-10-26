@@ -1,4 +1,3 @@
-import sweets.Chocolate;
 import sweets.Sweets;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ class GiftBox {
     private List<Sweets> sweetsInTheBox = new ArrayList<>(); //массив сладостей
     private double boxWeight; //общий вес коробки
     private double boxPrice; //общая стоимость коробки
-    private Predicate<Sweets> onlyChocolateAllowed = sweets -> true;
+    private Predicate<Sweets> boxPolicy = sweets -> true; //policy для фильтрации добавления сладостей в коробку
 
     GiftBox() {
     }
@@ -22,19 +21,24 @@ class GiftBox {
         return sweetsInTheBox;
     }
 
-    void turnOnThePolicy() {
-        onlyChocolateAllowed = sweets -> sweets.getClass().toString().contains("Chocolate");
+    void turnOnBoxPolicy(String policyChoice) {
+        switch (policyChoice) {
+            case "Chocolate":
+                boxPolicy = sweets -> sweets.getClass().toString().contains("Chocolate");
+                break;
+            case "Less than 100 RUR":
+                boxPolicy = sweets -> sweets.getPrice() < 100;
+                break;
+        }
+
     }
 
-    void turnOffThePolicy() {
-        onlyChocolateAllowed = sweets -> true;
+    void turnOffBoxPolicy() {
+        boxPolicy = sweets -> true;
     }
 
-    void setOnlyChocolateAllowed(Predicate<Sweets> onlyChocolateAllowed) {
-        this.onlyChocolateAllowed = onlyChocolateAllowed;
-    }
-
-    void setPolicy(Predicate<Sweets> policyPredicate){
+    void setBoxPolicy(Predicate<Sweets> boxPolicy) {
+        this.boxPolicy = boxPolicy;
     }
 
     /**
@@ -43,7 +47,7 @@ class GiftBox {
      * @param sweetsToAdd сладость для добавления из класса sweets.Sweets
      */
     void addSweetsToTheBox(Sweets sweetsToAdd) {
-        if (sweetsToAdd != null & onlyChocolateAllowed.test(sweetsToAdd)) {
+        if (sweetsToAdd != null & boxPolicy.test(sweetsToAdd)) {
             sweetsInTheBox.add(sweetsToAdd);
             boxPrice += sweetsToAdd.getPrice(); //увеличиваем стоимость и вес коробки по добавленной сладости
             boxWeight += sweetsToAdd.getWeight();

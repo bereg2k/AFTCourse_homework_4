@@ -2,6 +2,8 @@ import factory.LollipopFactory;
 import factory.SweetsFactory;
 import sweets.Chocolate;
 import sweets.Jellybean;
+import sweets.Lollipop;
+import sweets.Sweets;
 
 /**
  * Задание "Упаковка подарка".
@@ -59,7 +61,7 @@ public class Gift {
         giftBox.showBoxContent();
 
         System.out.println("\nЗадействуем policy для добавления сладостей в коробку...");
-        giftBox.turnOnThePolicy();
+        giftBox.turnOnBoxPolicy("Chocolate");
 
         System.out.println("\nДавайте добавим \"неподходящую\" сладость...");
         Jellybean skittlesPops = new Jellybean("Skittles Rainbow");
@@ -72,7 +74,7 @@ public class Gift {
         giftBox.showBoxContent();
 
         System.out.println("\nОтключим policy и опять добавим \"неподходящую\" сладость...");
-        giftBox.turnOffThePolicy();
+        giftBox.turnOffBoxPolicy();
         giftBox.addSweetsToTheBox(skittlesPops);
         giftBox.showBoxContent();
 
@@ -81,12 +83,26 @@ public class Gift {
         giftBox.addSweetsToTheBox(bigMarsBar);
         giftBox.showBoxContentWithPriceWeight();
 
+        System.out.println("\nВключим другую policy и добавим несколько других \"неподходящих\" сладостей...");
+        giftBox.turnOnBoxPolicy("Less than 100 RUR");
+        Sweets lindtChocolate = new Chocolate("Lindt 99%", 100, 250,"тёмный");
+        Sweets megaChups = new Lollipop("Mega Chupik", 220, 499,"XL");
+        giftBox.addSweetsToTheBox(lindtChocolate);
+        giftBox.addSweetsToTheBox(megaChups);
+        giftBox.showBoxContent();
+
+        System.out.println("\nПоменяем policy вручную и снова добавим несколько (ранее) \"неподходящих\" сладостей...");
+        giftBox.setBoxPolicy(sweets -> sweets.getPrice() < 500);
+        giftBox.addSweetsToTheBox(lindtChocolate);
+        giftBox.addSweetsToTheBox(megaChups);
+        giftBox.showBoxContentWithPriceWeight();
+
         //3. Реализация CostCalculator для подарочной коробки.
 
         System.out.println("\n3. Демонстрация работы CostCalculator.");
         System.out.println("\nДля следующего случая, вновь очистим нашу коробку и отключим policy...");
         giftBox.getSweetsInTheBox().clear();
-        giftBox.turnOffThePolicy();
+        giftBox.turnOffBoxPolicy();
         giftBox.showBoxContent();
 
     }
