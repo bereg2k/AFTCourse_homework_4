@@ -29,6 +29,8 @@ public class Gift {
 
         //1. Создать фабрику по производству сладостей.
         //создание объекта класса с помощью лямбда-выражения
+        System.out.println("1. Демонстрация работы фабрик по производству сладостей");
+
         System.out.println("Добавим немного шоколадных батончиков...");
         SweetsFactory marsBars = name -> new Chocolate(name, 80, 70, "молочный");
         giftBox.addSweetsToTheBox(marsBars.createSweets("MARS XL"));
@@ -47,29 +49,44 @@ public class Gift {
         LollipopFactory chupaChupsInc = new LollipopFactory();
         giftBox.addSweetsToTheBox(chupaChupsInc.createSweets("ChupaChups strawberry"));
         giftBox.addSweetsToTheBox(chupaChupsInc.createSweets("ChupaChups banana"));
-        giftBox.showBoxContent();
+        giftBox.showBoxContentWithPriceWeight();
 
         //2. Реализация policy для подарочной коробки.
 
-        System.out.println("\nДля следующего случая, очистим полностью нашу подарочную коробку...");
+        System.out.println("\n2. Демонстрация работы policy при добавлении сладостей в коробку.");
+        System.out.println("\nДля следующего случая, сначала очистим полностью нашу подарочную коробку...");
         giftBox.getSweetsInTheBox().clear();
         giftBox.showBoxContent();
 
-        System.out.println("\nДавайте добавим неподходящую шоколадку...");
-        Chocolate wrongAlenka = new Chocolate("Wrong Alenka",100,45,"молочный");
-        wrongAlenka.setRight(false);
-        giftBox.addSweetsToTheBox(wrongAlenka);
+        System.out.println("\nЗадействуем policy для добавления сладостей в коробку...");
+        giftBox.turnOnThePolicy();
+
+        System.out.println("\nДавайте добавим \"неподходящую\" сладость...");
+        Jellybean skittlesPops = new Jellybean("Skittles Rainbow");
+        giftBox.addSweetsToTheBox(skittlesPops);
         giftBox.showBoxContent();
 
-        System.out.println("\nДавайте добавим подходящую шоколадку...");
-        Chocolate rightAlenka = new Chocolate("Right Alenka",100,45,"молочный");
-        wrongAlenka.setRight(true);
-        giftBox.addSweetsToTheBox(rightAlenka);
+        System.out.println("\nДавайте добавим \"подходящую\" сладость...");
+        Chocolate alenka = new Chocolate("ALENKA");
+        giftBox.addSweetsToTheBox(alenka);
         giftBox.showBoxContent();
 
-        System.out.println("\nПоменяем условие добавления и опять добавим неподходящую шоколадку...");
-        giftBox.setPolicy(s -> false);
-        giftBox.addSweetsToTheBox(wrongAlenka);
+        System.out.println("\nОтключим policy и опять добавим \"неподходящую\" сладость...");
+        giftBox.turnOffThePolicy();
+        giftBox.addSweetsToTheBox(skittlesPops);
+        giftBox.showBoxContent();
+
+        System.out.println("\nДобавим ещё одну \"правильную\" сладость с включенным policy...");
+        Chocolate bigMarsBar = new Chocolate("MARS XL");
+        giftBox.addSweetsToTheBox(bigMarsBar);
+        giftBox.showBoxContentWithPriceWeight();
+
+        //3. Реализация CostCalculator для подарочной коробки.
+
+        System.out.println("\n3. Демонстрация работы CostCalculator.");
+        System.out.println("\nДля следующего случая, вновь очистим нашу коробку и отключим policy...");
+        giftBox.getSweetsInTheBox().clear();
+        giftBox.turnOffThePolicy();
         giftBox.showBoxContent();
 
     }

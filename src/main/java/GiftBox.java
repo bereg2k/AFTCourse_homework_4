@@ -1,3 +1,4 @@
+import sweets.Chocolate;
 import sweets.Sweets;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ class GiftBox {
     private List<Sweets> sweetsInTheBox = new ArrayList<>(); //массив сладостей
     private double boxWeight; //общий вес коробки
     private double boxPrice; //общая стоимость коробки
-    private Predicate <Sweets> someRequirement = sweet -> sweet.isRight;
+    private Predicate<Sweets> onlyChocolateAllowed = sweets -> true;
 
     GiftBox() {
     }
@@ -21,8 +22,19 @@ class GiftBox {
         return sweetsInTheBox;
     }
 
+    void turnOnThePolicy() {
+        onlyChocolateAllowed = sweets -> sweets.getClass().toString().contains("Chocolate");
+    }
+
+    void turnOffThePolicy() {
+        onlyChocolateAllowed = sweets -> true;
+    }
+
+    void setOnlyChocolateAllowed(Predicate<Sweets> onlyChocolateAllowed) {
+        this.onlyChocolateAllowed = onlyChocolateAllowed;
+    }
+
     void setPolicy(Predicate<Sweets> policyPredicate){
-        someRequirement = policyPredicate;
     }
 
     /**
@@ -31,7 +43,7 @@ class GiftBox {
      * @param sweetsToAdd сладость для добавления из класса sweets.Sweets
      */
     void addSweetsToTheBox(Sweets sweetsToAdd) {
-        if (sweetsToAdd != null & someRequirement.test(sweetsToAdd)) {
+        if (sweetsToAdd != null & onlyChocolateAllowed.test(sweetsToAdd)) {
             sweetsInTheBox.add(sweetsToAdd);
             boxPrice += sweetsToAdd.getPrice(); //увеличиваем стоимость и вес коробки по добавленной сладости
             boxWeight += sweetsToAdd.getWeight();
@@ -82,4 +94,6 @@ class GiftBox {
             System.out.printf("Общая стоимость коробки = %.2f руб.\n", boxPrice);
         }
     }
+
+
 }
