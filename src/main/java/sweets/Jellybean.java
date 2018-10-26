@@ -1,5 +1,8 @@
 package sweets;
 
+/**
+ * Класс, описывающий свойства сладости типа "МАРМЕЛАД".
+ */
 public class Jellybean extends Sweets {
     private String flavour; //вкус - клубника, малина, яблоко, банан, кола и т.д...
 
@@ -8,9 +11,13 @@ public class Jellybean extends Sweets {
         this.flavour = flavour;
     }
 
+    public enum Flavours { //enum-множество для вкусов мармелада
+        STRAWBERRY, RASPBERRY, BANANA, COLA
+    }
+
     public Jellybean(String name) {
         super(name, 40,50);
-        flavour = "клубника";
+        flavour = String.valueOf(Flavours.STRAWBERRY);
     }
 
     @Override

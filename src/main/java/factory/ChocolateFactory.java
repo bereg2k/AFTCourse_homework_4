@@ -14,6 +14,6 @@ public class ChocolateFactory implements SweetsFactory {
      */
     @Override
     public Chocolate createSweets(String name) {
-        return new Chocolate(name, 80, 70, "молочный");
+        return new Chocolate(name, 80, 70, String.valueOf(Chocolate.ChocolateTypes.DARK));
     }
 }

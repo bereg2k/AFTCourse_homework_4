@@ -1,11 +1,12 @@
 package sweets;
 
-import tools.PriceConverter;
-
+/**
+ * Абстрактный класс для общего описания сладостей.
+ */
 public abstract class Sweets {
-    private String name;
-    private double weight;
-    private double price;
+    private String name; //наименование сладости
+    private double weight; //вес сладости
+    private double price; //цена сладости
 
     Sweets(String name, double weight, double price) {
         this.name = name;

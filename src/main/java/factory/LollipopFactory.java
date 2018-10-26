@@ -14,6 +14,6 @@ public class LollipopFactory implements SweetsFactory {
      */
     @Override
     public Lollipop createSweets(String name) {
-        return new Lollipop(name, 15, 30, "S");
+        return new Lollipop(name, 30, 45, String.valueOf(Lollipop.LollipopSizes.M));
     }
 }

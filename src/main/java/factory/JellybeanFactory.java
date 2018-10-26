@@ -15,6 +15,6 @@ public class JellybeanFactory implements SweetsFactory {
      */
     @Override
     public Jellybean createSweets(String name) {
-        return new Jellybean(name, 40,50,"клубника");
+        return new Jellybean(name, 40, 50, String.valueOf(Jellybean.Flavours.BANANA));
     }
 }

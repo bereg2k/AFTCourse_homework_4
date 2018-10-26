@@ -19,7 +19,11 @@ class GiftBox {
     private boolean isPriceConverted = false; // флаг для включения конвертации валют
     private Double rate; //коэффициент конвертации
     private String currency; //строковое значение валюты для конвертации
-    private PriceConverter rubToCurrency = new PriceConverter();
+    private PriceConverter rubToCurrency = new PriceConverter(); //объект класса, реализующий интерфейс конвертации валют
+
+    enum Currency { //enum-значения для валют
+        EUR, USD, GBP, RUB
+    }
 
     GiftBox() {
     }
@@ -28,6 +32,14 @@ class GiftBox {
         return sweetsInTheBox;
     }
 
+    /**
+     * Метод запуска работы политики ограничения на добавление сладостей в коробку.
+     * Метод получает переменную, по которой понимает как надо фильтровать новые сладости при добавлении.
+     * Например, turnOnBoxPolicy("ONLY CHOCOLATE") позволит добавлять в коробку только шоколад.
+     * А turnOnBoxPolicy("LESS THAN 100 RUB") не даст добавить в коробку ни одной сладости дороже 100 рублей.
+     *
+     * @param policyChoice строковая переменная для определения нужного вида фильтрации.
+     */
     void turnOnBoxPolicy(String policyChoice) {
         switch (policyChoice) {
             case "ONLY CHOCOLATE":
@@ -43,19 +55,36 @@ class GiftBox {
 
     }
 
+    /**
+     * Метод отключения работы политики фильтрации для коробки.
+     */
     void turnOffBoxPolicy() {
         boxPolicy = sweets -> true;
     }
 
+    /**
+     * Метод явного задания политики фильтрации в виде нового лямбда-выражения
+     *
+     * @param boxPolicy новая политика фильтрации (как правило, в виде лямбда-выражения)
+     */
     void setBoxPolicy(Predicate<Sweets> boxPolicy) {
         this.boxPolicy = boxPolicy;
     }
 
-
+    /**
+     * Включение/выключение отображения общей стоимости коробки в иностранной валюте
+     *
+     * @param priceConverted для включения передайте true, для отключения конвертации - false
+     */
     void setPriceConverted(boolean priceConverted) {
         isPriceConverted = priceConverted;
     }
 
+    /**
+     * Метод явного задания иностранной валюты для дальнейшей конвертации в неё общей стоимости коробки.
+     *
+     * @param currency значение валюты в виде строкового значения (EUR, USD, GBP)
+     */
     void setCurrency(String currency) {
         this.currency = currency;
         switch (currency) {
@@ -74,6 +103,39 @@ class GiftBox {
                 break;
         }
 
+    }
+
+    /**
+     * Метод получения названия классов, входящих в коробку сладостей.
+     * Имена классов будут системными (например, Chocolate вместо "Шоколад").
+     * На основе Stream API.
+     */
+    void getClassNamesOfSweets() {
+        sweetsInTheBox.stream()
+                .forEach(sweets -> System.out.println(sweets.getClass().toString().substring(13)));
+    }
+
+    /**
+     * Метод подсчёта количество сладостей каждого вида в коробке.
+     * На основе Stream API.
+     */
+    void countSweetsTypeInTheBox() {
+        System.out.println("Количество шоколадок в коробке = " + sweetsInTheBox.stream()
+                .filter(sweets -> sweets.getClass().toString().contains("Chocolate")).count());
+        System.out.println("Количество мармелада в коробке = " + sweetsInTheBox.stream()
+                .filter(sweets -> sweets.getClass().toString().contains("Jellybean")).count());
+        System.out.println("Количество леденцов в коробке = " + sweetsInTheBox.stream()
+                .filter(sweets -> sweets.getClass().toString().contains("Lollipop")).count());
+    }
+
+    /**
+     * Метод вывода всех сладостей в коробке в виде списка, стоимость которых не больше параметра limitPrice.
+     * На основе Stream API.
+     *
+     * @param limitPrice граничная стоимость сладостей, выше которого сладости не отображаются.
+     */
+    void getCheapSweets(Double limitPrice) {
+        sweetsInTheBox.stream().filter(sweets -> sweets.getPrice() <= limitPrice).forEach(System.out::println);
     }
 
     /**
@@ -132,12 +194,11 @@ class GiftBox {
                 System.out.println(++i + ". " + s);
             }
             System.out.printf("Общий вес коробки = %.2f г.\n", boxWeight);
-            if (isPriceConverted) {
+            if (isPriceConverted) { //если конвертация включена, то выводим стоимость в виде валютного значения
                 System.out.printf("Общая стоимость коробки = %s\n", rubToCurrency.convertCurrency(boxPrice, rate, currency));
             } else {
                 System.out.printf("Общая стоимость коробки = %.2f руб.\n", boxPrice);
             }
-
         }
     }
 }

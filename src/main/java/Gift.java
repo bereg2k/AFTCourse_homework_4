@@ -4,24 +4,14 @@ import sweets.Chocolate;
 import sweets.Jellybean;
 import sweets.Lollipop;
 import sweets.Sweets;
-import tools.PriceConverter;
 
 /**
- * Задание "Упаковка подарка".
- * 1) Реализовать: функциональный интерфейс фабрики сладостей - который имеет один абcтрактный метод по созданию вкусняшек.
- * Реализовать данный интерфейс 4 раза - 2 как отдельные классы, 2 в коде через лямбды (см в презентации Person::new)
- * то есть фабрика может генерировать только определенные классы сладостей, только печеньки или только шоколадки,
- * или строго по весу подбирать или по цене (тут на ваше усмотрение).
- * 2) Реализовать policy для коробочки - таким образом чтобы можно было создать коробку с определенным предикатом -
- * то есть добавление только определенных сладостей, которые соответствуют какому либо условию (опять-таки на свое усмотрение),
- * также реализовать 2 класса использующего данный интерфейс и позволить использовать лямбды.
- * 3) Реализовать внутри коробочки что-то типа CostCalculator  (будем считать что по умолчанию все цены в рублях,
- * а данная сущность будет его переводить в другие единицы - необходимо также создать интерфейс, и пару его реализаций -
- * рубли, евро и предоставить возможность объявить его в виде лямбды).
- * 4) Также добавить в коробочку несколько методов,  внутри использующих Stream API -
- * вывести название класса каждой сладости, посчитать количество определенного вида сладостей в коробке
- * 5) Для более симпатичной реализации классов самих сладостей, можете добавить ENUM’ы.
- * Там типа шоколада (белый, молочный, темный), размерности (S, M, XL) или еще что-то
+ * Задание "Упаковка подарка" - демонстрация возможностей Java 8.
+ * 1) Реализовать функциональный интерфейс фабрики сладостей
+ * 2) Реализовать policy для коробочки
+ * 3) Реализовать внутри коробочки что-то типа CostCalculator
+ * 4) Добавить в коробочку несколько методов,  внутри использующих Stream API
+ * 5) Для более симпатичной реализации классов самих сладостей, добавить ENUM’ы.
  *
  * @author Oleg Berezhnoy
  */
@@ -32,12 +22,12 @@ public class Gift {
 
         //1. Создать фабрику по производству сладостей.
         //создание объекта класса с помощью лямбда-выражения
-        System.out.println("1. Демонстрация работы фабрик по производству сладостей");
+        System.out.println("\n1. Демонстрация работы фабрик по производству сладостей");
 
-        System.out.println("Добавим немного шоколадных батончиков...");
-        SweetsFactory marsBars = name -> new Chocolate(name, 80, 70, "молочный");
-        giftBox.addSweetsToTheBox(marsBars.createSweets("MARS XL"));
-        giftBox.addSweetsToTheBox(marsBars.createSweets("MARS Peanuts"));
+        System.out.println("\nДобавим немного шоколадных батончиков...");
+        SweetsFactory marsBars = name -> new Chocolate(name, 80, 70, String.valueOf(Chocolate.ChocolateTypes.WHITE));
+        giftBox.addSweetsToTheBox(marsBars.createSweets("MARS XL Whitey"));
+        giftBox.addSweetsToTheBox(marsBars.createSweets("MARS Peanuts Arctic"));
         giftBox.showBoxContent();
 
         //создание объекта класса с помощью ссылки на метод (на конструктор)
@@ -61,8 +51,9 @@ public class Gift {
         giftBox.getSweetsInTheBox().clear();
         giftBox.showBoxContent();
 
-        System.out.println("\nЗадействуем policy для добавления сладостей в коробку...");
-        giftBox.turnOnBoxPolicy("ONLY CHOCOLATE");
+        String policyChocolate = "ONLY CHOCOLATE";
+        System.out.println("\nЗадействуем policy (" + policyChocolate + ") для добавления сладостей в коробку...");
+        giftBox.turnOnBoxPolicy(policyChocolate);
 
         System.out.println("\nДавайте добавим \"неподходящую\" сладость...");
         Jellybean skittlesPops = new Jellybean("Skittles Rainbow");
@@ -74,20 +65,21 @@ public class Gift {
         giftBox.addSweetsToTheBox(alenka);
         giftBox.showBoxContent();
 
-        System.out.println("\nОтключим policy и опять добавим \"неподходящую\" сладость...");
+        System.out.println("\nОтключим policy \"" + policyChocolate + "\" и опять добавим \"неподходящую\" сладость...");
         giftBox.turnOffBoxPolicy();
         giftBox.addSweetsToTheBox(skittlesPops);
         giftBox.showBoxContent();
 
-        System.out.println("\nДобавим ещё одну \"правильную\" сладость с включенным policy...");
+        System.out.println("\nДобавим ещё одну \"правильную\" сладость с включенным policy \"" + policyChocolate + "\"...");
         Chocolate bigMarsBar = new Chocolate("MARS XL");
         giftBox.addSweetsToTheBox(bigMarsBar);
         giftBox.showBoxContent();
 
-        System.out.println("\nВключим другую policy и добавим несколько других \"неподходящих\" сладостей...");
-        giftBox.turnOnBoxPolicy("LESS THAN 100 RUB");
-        Sweets lindtChocolate = new Chocolate("Lindt 99%", 100, 250,"тёмный");
-        Sweets megaChups = new Lollipop("Mega Chupik", 220, 499,"XL");
+        String policyLessThan = "LESS THAN 100 RUB";
+        System.out.println("\nВключим другую policy (" + policyLessThan + ") и добавим несколько других \"неподходящих\" сладостей...");
+        giftBox.turnOnBoxPolicy(policyLessThan);
+        Sweets lindtChocolate = new Chocolate("Lindt 99%", 100, 250, String.valueOf(Chocolate.ChocolateTypes.DARK));
+        Sweets megaChups = new Lollipop("Mega Chupik", 220, 499, String.valueOf(Lollipop.LollipopSizes.XL));
         giftBox.addSweetsToTheBox(lindtChocolate);
         giftBox.addSweetsToTheBox(megaChups);
         giftBox.showBoxContent();
@@ -104,11 +96,11 @@ public class Gift {
         System.out.println("\nДля следующего случая отключим policy для коробки и включим конвертацию валют в ЕВРО...");
         giftBox.turnOffBoxPolicy();
         giftBox.setPriceConverted(true);
-        giftBox.setCurrency("EUR");
+        giftBox.setCurrency(String.valueOf(GiftBox.Currency.EUR));
         giftBox.showBoxContentWithPriceWeight();
 
         System.out.println("\nА теперь включим конвертацию валют в ДОЛЛАРЫ США...");
-        giftBox.setCurrency("USD");
+        giftBox.setCurrency(String.valueOf(GiftBox.Currency.USD));
         giftBox.showBoxContentWithPriceWeight();
 
         System.out.println("\nВыключим конвертацию валют совсем...");
@@ -118,8 +110,16 @@ public class Gift {
         //4. Демонстрация методов Stream API
         System.out.println("\n4. Демонстрация работы методов Stream API.");
 
+        System.out.println("\nНа текущий момент в коробке находятся следующие экземпляры классов: ");
+        giftBox.getClassNamesOfSweets();
 
+        System.out.println("\nКоличество сладостей каждого типа следующее: ");
+        giftBox.countSweetsTypeInTheBox();
 
+        double limitPrice = 81.49;
+        System.out.println("\nCладости не дороже " + limitPrice + " руб. вот такие: ");
+        giftBox.getCheapSweets(limitPrice);
 
+        System.out.println("\nСпасибо за просмотр демонстрации возможностей Java 8! Всех благ!");
     }
 }
