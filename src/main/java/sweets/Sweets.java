@@ -1,5 +1,7 @@
 package sweets;
 
+import tools.PriceConverter;
+
 public abstract class Sweets {
     private String name;
     private double weight;

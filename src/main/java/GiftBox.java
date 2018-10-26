@@ -1,4 +1,5 @@
 import sweets.Sweets;
+import tools.PriceConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,13 @@ class GiftBox {
     private List<Sweets> sweetsInTheBox = new ArrayList<>(); //массив сладостей
     private double boxWeight; //общий вес коробки
     private double boxPrice; //общая стоимость коробки
+
     private Predicate<Sweets> boxPolicy = sweets -> true; //policy для фильтрации добавления сладостей в коробку
+
+    private boolean isPriceConverted = false; // флаг для включения конвертации валют
+    private Double rate; //коэффициент конвертации
+    private String currency; //строковое значение валюты для конвертации
+    private PriceConverter rubToCurrency = new PriceConverter();
 
     GiftBox() {
     }
@@ -23,11 +30,14 @@ class GiftBox {
 
     void turnOnBoxPolicy(String policyChoice) {
         switch (policyChoice) {
-            case "Chocolate":
+            case "ONLY CHOCOLATE":
                 boxPolicy = sweets -> sweets.getClass().toString().contains("Chocolate");
                 break;
-            case "Less than 100 RUR":
+            case "LESS THAN 100 RUB":
                 boxPolicy = sweets -> sweets.getPrice() < 100;
+                break;
+            default:
+                boxPolicy = sweets -> true;
                 break;
         }
 
@@ -39,6 +49,31 @@ class GiftBox {
 
     void setBoxPolicy(Predicate<Sweets> boxPolicy) {
         this.boxPolicy = boxPolicy;
+    }
+
+
+    void setPriceConverted(boolean priceConverted) {
+        isPriceConverted = priceConverted;
+    }
+
+    void setCurrency(String currency) {
+        this.currency = currency;
+        switch (currency) {
+            case "EUR":
+                rate = 0.013;
+                break;
+            case "USD":
+                rate = 0.015;
+                break;
+            case "GBP":
+                rate = 0.012;
+                break;
+            default:
+                rate = 1.0;
+                this.currency = "RUB";
+                break;
+        }
+
     }
 
     /**
@@ -73,6 +108,7 @@ class GiftBox {
         if (sweetsInTheBox.isEmpty()) {
             System.out.println("Ваша подарочная коробка пуста.");
         } else {
+            System.out.println("Содержимое коробки следующее: ");
             int i = 0;
             for (Sweets s : sweetsInTheBox
             ) {
@@ -89,15 +125,21 @@ class GiftBox {
         if (sweetsInTheBox.isEmpty()) {
             System.out.println("Ваша подарочная коробка пуста.");
         } else {
+            System.out.println("Содержимое коробки следующее: ");
             int i = 0;
             for (Sweets s : sweetsInTheBox
             ) {
                 System.out.println(++i + ". " + s);
             }
             System.out.printf("Общий вес коробки = %.2f г.\n", boxWeight);
-            System.out.printf("Общая стоимость коробки = %.2f руб.\n", boxPrice);
+            if (isPriceConverted) {
+                System.out.printf("Общая стоимость коробки = %s\n", rubToCurrency.convertCurrency(boxPrice, rate, currency));
+            } else {
+                System.out.printf("Общая стоимость коробки = %.2f руб.\n", boxPrice);
+            }
+
         }
     }
-
-
 }
+
+

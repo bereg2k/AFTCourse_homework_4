@@ -4,6 +4,7 @@ import sweets.Chocolate;
 import sweets.Jellybean;
 import sweets.Lollipop;
 import sweets.Sweets;
+import tools.PriceConverter;
 
 /**
  * Задание "Упаковка подарка".
@@ -61,7 +62,7 @@ public class Gift {
         giftBox.showBoxContent();
 
         System.out.println("\nЗадействуем policy для добавления сладостей в коробку...");
-        giftBox.turnOnBoxPolicy("Chocolate");
+        giftBox.turnOnBoxPolicy("ONLY CHOCOLATE");
 
         System.out.println("\nДавайте добавим \"неподходящую\" сладость...");
         Jellybean skittlesPops = new Jellybean("Skittles Rainbow");
@@ -81,10 +82,10 @@ public class Gift {
         System.out.println("\nДобавим ещё одну \"правильную\" сладость с включенным policy...");
         Chocolate bigMarsBar = new Chocolate("MARS XL");
         giftBox.addSweetsToTheBox(bigMarsBar);
-        giftBox.showBoxContentWithPriceWeight();
+        giftBox.showBoxContent();
 
         System.out.println("\nВключим другую policy и добавим несколько других \"неподходящих\" сладостей...");
-        giftBox.turnOnBoxPolicy("Less than 100 RUR");
+        giftBox.turnOnBoxPolicy("LESS THAN 100 RUB");
         Sweets lindtChocolate = new Chocolate("Lindt 99%", 100, 250,"тёмный");
         Sweets megaChups = new Lollipop("Mega Chupik", 220, 499,"XL");
         giftBox.addSweetsToTheBox(lindtChocolate);
@@ -99,11 +100,26 @@ public class Gift {
 
         //3. Реализация CostCalculator для подарочной коробки.
 
-        System.out.println("\n3. Демонстрация работы CostCalculator.");
-        System.out.println("\nДля следующего случая, вновь очистим нашу коробку и отключим policy...");
-        giftBox.getSweetsInTheBox().clear();
+        System.out.println("\n3. Демонстрация работы CostCalculator (конвертация валют для цены).");
+        System.out.println("\nДля следующего случая отключим policy для коробки и включим конвертацию валют в ЕВРО...");
         giftBox.turnOffBoxPolicy();
-        giftBox.showBoxContent();
+        giftBox.setPriceConverted(true);
+        giftBox.setCurrency("EUR");
+        giftBox.showBoxContentWithPriceWeight();
+
+        System.out.println("\nА теперь включим конвертацию валют в ДОЛЛАРЫ США...");
+        giftBox.setCurrency("USD");
+        giftBox.showBoxContentWithPriceWeight();
+
+        System.out.println("\nВыключим конвертацию валют совсем...");
+        giftBox.setPriceConverted(false);
+        giftBox.showBoxContentWithPriceWeight();
+
+        //4. Демонстрация методов Stream API
+        System.out.println("\n4. Демонстрация работы методов Stream API.");
+
+
+
 
     }
 }
